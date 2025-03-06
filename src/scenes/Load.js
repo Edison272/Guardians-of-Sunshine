@@ -9,6 +9,18 @@ class Load extends Phaser.Scene {
         this.load.image('start-screen-2', './assets/Backgrounds/StartScreen-2.png')
 
 
+        //GUARDIAN (PLAYER)
+        this.load.spritesheet('guardian', './assets/Sprites/Game/GuardianSpriteSheet.png', {
+            frameWidth: 408,
+            frameHeight: 32,
+            startFrame: 0,
+            endFrame: 16
+        })
+
+        //PLAY SCENE
+        this.load.image('ui-bar', './assets/Sprites/UI/UIbar.png')
+        this.load.image('life-counter', './assets/Sprites/UI/LifeCounter.png')
+
         // SET GAME CONTROLS
         // keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT)
         // keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT)
@@ -29,6 +41,8 @@ class Load extends Phaser.Scene {
             frameRate: 2,
             repeat: -1
         });
+
+        // GUARDIAN (PLAYER)
 
         // START THE GAME
         this.scene.start('startScene') 
