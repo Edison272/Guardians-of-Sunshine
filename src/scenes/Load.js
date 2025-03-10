@@ -11,10 +11,10 @@ class Load extends Phaser.Scene {
 
         //GUARDIAN (PLAYER)
         this.load.spritesheet('guardian', './assets/Sprites/Game/GuardianSpriteSheet.png', {
-            frameWidth: 408,
+            frameWidth: 24,
             frameHeight: 32,
             startFrame: 0,
-            endFrame: 16
+            endFrame: 23
         })
 
         //PLAY SCENE
@@ -43,6 +43,50 @@ class Load extends Phaser.Scene {
         });
 
         // GUARDIAN (PLAYER)
+        this.anims.create({
+            key: 'guardian-dance',
+            frameRate: 6,
+            repeat: 0,
+            frames: this.anims.generateFrameNumbers('guardian', {frames: [1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 0]})
+        })
+
+        this.anims.create({
+            key: 'guardian-walk',
+            frameRate: 8,
+            repeat: -1,
+            frames: this.anims.generateFrameNumbers('guardian', {
+                start: 4,
+                end: 5
+            })
+        })
+
+        this.anims.create({
+            key: 'guardian-jump',
+            frameRate: 25,
+            repeat: 0,
+            frames: this.anims.generateFrameNumbers('guardian', {frames: [4, 17, 18, 19, 19, 19, 18, 17, 4]})
+        })
+
+        this.anims.create({
+            key: 'guardian-punch',
+            frameRate: 16,
+            repeat: 0,
+            frames: this.anims.generateFrameNumbers('guardian', {frames: [6, 20, 21, 9, 9]})
+        })
+
+        this.anims.create({
+            key: 'guardian-final-hit',
+            frameRate: 6,
+            repeat: 0,
+            frames: this.anims.generateFrameNumbers('guardian', {frames: [7, 23, 24, 8]})
+        })
+
+        this.anims.create({
+            key: 'guardian-bomb',
+            frameRate: 16,
+            repeat: 0,
+            frames: this.anims.generateFrameNumbers('guardian', {frames: [7, 12, 23, 8]})
+        })
 
         // START THE GAME
         this.scene.start('startScene') 
