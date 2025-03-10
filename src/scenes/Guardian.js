@@ -14,6 +14,8 @@ class Guardian extends Phaser.Physics.Arcade.Sprite {
 
       //state variables
       this.OnGround = false
+      this.isAttacking = false
+      this.finalHit = false
 
       //attacking data
       this.atk_type = 'punch'
@@ -114,15 +116,23 @@ class JumpState extends State {
 
 class AttackState extends State {
     enter(scene, guardian) {
+        guardian.isAttacking = true
+        guardian.body.setSize(20,28).setOffset(2, 4)
         guardian.anims.play(`guardian-${guardian.atk_type}`).once('animationcomplete', () => {
-            
-            this.stateMachine.transition('final_hit')
+            guardian.isAttacking = false
+            guardian.body.setSize(8,28).setOffset(8, 4)
+            if(guardian.finalHit) {
+                this.stateMachine.transition('final_hit')
+            } else {
+                this.stateMachine.transition('idle')
+            }
         })
     }
 }
 
 class FinalHitState extends State {
     enter(scene, guardian) {
+        guardian.finalHit = false
         guardian.anims.play('guardian-final-hit').once('animationcomplete', () => {
 
             this.stateMachine.transition('idle')

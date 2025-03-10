@@ -22,8 +22,21 @@ class Load extends Phaser.Scene {
             frameWidth: 57,
             frameHeight: 43,
             startFrame: 0,
-            endFrame: 9
+            endFrame: 11
         })
+
+        this.load.image('stinger', './assets/Sprites/Game/BeeStinger.png')
+
+        //COIN
+        this.load.spritesheet('coin', './assets/Sprites/Game/CoinSpriteSheet.png', {
+            frameWidth: 9,
+            frameHeight: 17,
+            startFrame: 0,
+            endFrame: 7
+        })
+
+        //FIREPIT
+        this.load.image('firepit', './assets/Sprites/Game/Firepit.png')
 
         //PLAY SCENE
         this.load.image('ui-bar', './assets/Sprites/UI/UIbar.png')
@@ -99,8 +112,8 @@ class Load extends Phaser.Scene {
         //BEE
         this.anims.create({
             key: 'bee-fly',
-            frameRate: 25,
-            repeat: 0,
+            frameRate: 8,
+            repeat: -1,
             frames: this.anims.generateFrameNumbers('bee', {
                 start: 8,
                 end: 9
@@ -109,22 +122,41 @@ class Load extends Phaser.Scene {
 
         this.anims.create({
             key: 'bee-charge',
-            frameRate: 30,
-            repeat: 0,
+            frameRate: 15,
+            repeat: 5,
             frames: this.anims.generateFrameNumbers('bee', {
-                start: 0,
-                end: 2
+                frames: [0, 1, 2]
             })
         })
 
         this.anims.create({
             key: 'bee-fire',
-            frameRate: 4,
+            frameRate: 14,
             repeat: 0,
             frames: this.anims.generateFrameNumbers('bee', {
-                frames: [3, 1, 4, 4, 4, 5, 6, 7]
+                frames: [3, 1, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 6, 6, 6, 7, 7, 7]
             })
         })
+
+        //COIN
+        this.anims.create({
+            key: 'coin-idle',
+            frameRate: 4,
+            repeat: -1,
+            frames: this.anims.generateFrameNumbers('coin', {
+                frames: [0, 1, 2, 1]
+            })
+        })
+
+        this.anims.create({
+            key: 'coin-collect',
+            frameRate: 15,
+            repeat: 0,
+            frames: this.anims.generateFrameNumbers('coin', {
+                frames: [3, 4, 5, 6, 7, 5, 6, 7, 5, 6, 7, 5, 6, 7, 5, 6, 7, 5, 6, 7, 5, 6, 7]
+            })
+        })
+
 
         // START THE GAME
         this.scene.start('startScene') 
