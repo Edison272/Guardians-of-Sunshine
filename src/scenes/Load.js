@@ -8,6 +8,12 @@ class Load extends Phaser.Scene {
         this.load.image('start-screen-1', './assets/Backgrounds/StartScreen-1.png')
         this.load.image('start-screen-2', './assets/Backgrounds/StartScreen-2.png')
 
+        //LEVEL SCREEN
+        this.load.image('level-1', './assets/Backgrounds/Level-1-Pic.png')
+
+        //Win Lose SCREEN
+        this.load.image('win-screen', './assets/Backgrounds/WinScreen.png')
+        this.load.image('lose-screen', './assets/Backgrounds/LoseScreen.png')
 
         //GUARDIAN (PLAYER)
         this.load.spritesheet('guardian', './assets/Sprites/Game/GuardianSpriteSheet.png', {
@@ -35,12 +41,18 @@ class Load extends Phaser.Scene {
             endFrame: 7
         })
 
+        this.load.audio('coin-jingle', './assets/SFX/CoinJingle.mp3')
+
         //FIREPIT
         this.load.image('firepit', './assets/Sprites/Game/Firepit.png')
 
         //PLAY SCENE
         this.load.image('ui-bar', './assets/Sprites/UI/UIbar.png')
         this.load.image('life-counter', './assets/Sprites/UI/LifeCounter.png')
+
+
+        //MUSIC
+        this.load.audio('Intro', './assets/SFX/Music/GameIntro.mp3')
 
         // SET GAME CONTROLS
         // keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT)

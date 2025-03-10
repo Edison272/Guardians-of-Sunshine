@@ -17,6 +17,7 @@ class Coin extends Phaser.Physics.Arcade.Sprite {
     collect() {
         this.body.enable = false
         this.anims.play('coin-collect').once('animationcomplete', () => {
+            this.scene.sound.play('coin-jingle')
             this.destroy()
         })
 

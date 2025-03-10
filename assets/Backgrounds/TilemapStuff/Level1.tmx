@@ -29,7 +29,7 @@
 </data>
  </layer>
  <objectgroup id="2" name="SpawnPoint">
-  <object id="2" name="PlayerSpawn" x="696" y="156">
+  <object id="2" name="PlayerSpawn" x="144" y="96">
    <point/>
   </object>
   <object id="4" name="BouncyBeeSpawn" x="876" y="156">

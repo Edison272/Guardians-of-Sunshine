@@ -55,6 +55,13 @@ class Play extends Phaser.Scene {
         if(this.lives > 0) {
             this.life_tokens[this.lives-1].destroy()
             this.lives -= 1
+            if(this.lives == 0) {
+                let lose_screen = this.add.sprite(game.config.width/2, game.config.height/2, 'lose-screen').setScale(4).setOrigin(0.5, 0.5)
+                this.startDelay = this.time.delayedCall(1500, () => {
+                    this.scene.restart()
+                    this.scene.start('level_1_Scene')
+                });
+            }
         }
     }
 

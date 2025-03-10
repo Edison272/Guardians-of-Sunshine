@@ -117,8 +117,8 @@ class Level_1 extends Phaser.Scene {
         }
     }
 
-    beeDown() {
-        
+    gameover() {
+        let lose_screen = this.add.sprite(game.config.width/2, game.config.height/2, 'lose-screen').setScale(4).setOrigin(0.5, 0.5)
     }
 
 
@@ -137,12 +137,15 @@ class Level_1 extends Phaser.Scene {
         }
 
         if(this.player.x > this.fight_bee_x && this.bee.active == false) {
-            console.log('buzz')
             this.bee.active = true
         }
 
         if(this.player.x >= this.level_complete) {
-            console.log('you win')
+            let win_screen = this.add.sprite(this.player.x, this.player.y, 'win-screen').setScale(4).setOrigin(0.5, 0.5)
+            this.startDelay = this.time.delayedCall(1500, () => {
+                this.scene.launch('playScene')
+                this.scene.restart()
+            });
         }
 
         this.stingers.getChildren().forEach(stinger => {
