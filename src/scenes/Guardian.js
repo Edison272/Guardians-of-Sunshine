@@ -4,16 +4,16 @@ class Guardian extends Phaser.Physics.Arcade.Sprite {
       scene.add.existing(this)
       scene.physics.add.existing(this)
 
-      this.setScale(3)
+      this.setScale(2.5)
 
       //swordsman physics
-      this.body.setSize(20,27).setOffset(8, 4)
+      this.body.setSize(8,28).setOffset(8, 4)
       this.body.pushable = false
-      this.setGravityY(10);
+      this.setGravityY(1000);
       this.speed = 10
 
       //state variables
-      this.OnGround = true
+      this.OnGround = false
 
       //attacking data
       this.atk_type = 'punch'
@@ -54,7 +54,7 @@ class IdleState extends State {
             this.stateMachine.transition('walk')
         }
 
-        if (Phaser.Input.Keyboard.JustDown(keyUP)) {
+        if (Phaser.Input.Keyboard.JustDown(keyUP) && guardian.OnGround == true) {
             this.stateMachine.transition('jump')
         }
         if (Phaser.Input.Keyboard.JustDown(keyDOWN)) {
@@ -68,29 +68,47 @@ class WalkState extends State {
         guardian.anims.play('guardian-walk', true)
     }
     execute(scene, guardian) {
+        if (Phaser.Input.Keyboard.JustDown(keyDOWN)) {
+            this.stateMachine.transition('attack')
+        }
         if (keyLEFT.isDown) {
             guardian.setFlipX(true)
-            guardian.setVelocityX(-50)
-        }
-
-        else if (keyRIGHT.isDown) {
+            if (Phaser.Input.Keyboard.JustDown(keyUP) && guardian.OnGround) {
+                guardian.setVelocityX(-300)
+                this.stateMachine.transition('jump')
+            } else {
+                guardian.setVelocityX(-200)
+            }
+            
+        } else if (keyRIGHT.isDown) {
             guardian.setFlipX(false)
-            guardian.setVelocityX(50)
-        }
-        else {
+            if (Phaser.Input.Keyboard.JustDown(keyUP) && guardian.OnGround) {
+                guardian.setVelocityX(300)
+                this.stateMachine.transition('jump')
+            } else {
+                guardian.setVelocityX(200)
+            }
+            
+        } else {
             this.stateMachine.transition('idle')
         }
+
+
     }
 }
 
 class JumpState extends State {
     enter(scene, guardian) {
         guardian.anims.play('guardian-jump').once('animationcomplete', () => {
+            guardian.OnGround = false
             guardian.setVelocityY(0)
-            this.stateMachine.transition('idle')
+            if (keyLEFT.isDown ||keyRIGHT.isDown) {
+                this.stateMachine.transition('walk')
+            } else {
+                this.stateMachine.transition('idle')
+            }
         })
-        guardian.setVelocityY(-200)
-        guardian.OnGround = false
+        guardian.setVelocityY(-500)
     }
 }
 

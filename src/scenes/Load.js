@@ -17,6 +17,14 @@ class Load extends Phaser.Scene {
             endFrame: 23
         })
 
+        //BOUNCING BEE
+        this.load.spritesheet('bee', './assets/Sprites/Game/BouncingBee.png', {
+            frameWidth: 57,
+            frameHeight: 43,
+            startFrame: 0,
+            endFrame: 9
+        })
+
         //PLAY SCENE
         this.load.image('ui-bar', './assets/Sprites/UI/UIbar.png')
         this.load.image('life-counter', './assets/Sprites/UI/LifeCounter.png')
@@ -78,7 +86,7 @@ class Load extends Phaser.Scene {
             key: 'guardian-final-hit',
             frameRate: 6,
             repeat: 0,
-            frames: this.anims.generateFrameNumbers('guardian', {frames: [7, 23, 24, 8]})
+            frames: this.anims.generateFrameNumbers('guardian', {frames: [7, 22, 23, 8]})
         })
 
         this.anims.create({
@@ -86,6 +94,36 @@ class Load extends Phaser.Scene {
             frameRate: 16,
             repeat: 0,
             frames: this.anims.generateFrameNumbers('guardian', {frames: [7, 12, 23, 8]})
+        })
+
+        //BEE
+        this.anims.create({
+            key: 'bee-fly',
+            frameRate: 25,
+            repeat: 0,
+            frames: this.anims.generateFrameNumbers('bee', {
+                start: 8,
+                end: 9
+            })
+        })
+
+        this.anims.create({
+            key: 'bee-charge',
+            frameRate: 30,
+            repeat: 0,
+            frames: this.anims.generateFrameNumbers('bee', {
+                start: 0,
+                end: 2
+            })
+        })
+
+        this.anims.create({
+            key: 'bee-fire',
+            frameRate: 4,
+            repeat: 0,
+            frames: this.anims.generateFrameNumbers('bee', {
+                frames: [3, 1, 4, 4, 4, 5, 6, 7]
+            })
         })
 
         // START THE GAME
