@@ -35,6 +35,9 @@ class Bee extends Phaser.Physics.Arcade.Sprite {
 
     damage(dmg = 1) {
         this.health -= dmg
+        if(this.health < 0) {
+            this.health = 0
+        }
     }
     defeated() {
         this.anims.play('bee-fly')

@@ -20,7 +20,7 @@ class Load extends Phaser.Scene {
             frameWidth: 24,
             frameHeight: 32,
             startFrame: 0,
-            endFrame: 23
+            endFrame: 26
         })
 
         //LE BOMBUH
@@ -139,9 +139,9 @@ class Load extends Phaser.Scene {
 
         this.anims.create({
             key: 'guardian-bomb',
-            frameRate: 4,
+            frameRate: 6,
             repeat: 0,
-            frames: this.anims.generateFrameNumbers('guardian', {frames: [4, 6, 11, 12]})
+            frames: this.anims.generateFrameNumbers('guardian', {frames: [4, 6, 11, 24, 25, 26, 12]})
         })
         this.anims.create({
             key: 'guardian-bomb-throw',

@@ -40,6 +40,7 @@ class Level_1 extends Phaser.Scene {
         // PLAYER
         const player_spawn = map.findObject('SpawnPoint', (obj) => obj.name === 'PlayerSpawn')
         this.player = new Guardian(this, player_spawn.x*3+100, player_spawn.y*3, 'guardian').setOrigin(0.75, 1)
+        this.bombs = this.add.group()
 
         //bee
         const bee_spawn = map.findObject('SpawnPoint', (obj) => obj.name === 'BouncyBeeSpawn')
@@ -121,6 +122,23 @@ class Level_1 extends Phaser.Scene {
             }
         })
 
+        this.physics.add.collider(this.bombs, caveLayer, (bomb, caveLayer) => {
+            bomb.detonate()
+        })
+
+        this.physics.add.overlap(this.bombs, this.bee, (bomb, bee) => {
+            bee.damage(bomb.bomb_dmg)
+            bomb.detonate()
+            this.scene.get('playScene').updateBossHealth(this.bee.health/this.bee.max_health)
+            if(bee.health == 0) {
+                this.scene.get('playScene').addScore(bee.points)
+                this.scene.get('playScene').toggleBossUI(false)
+                this.bee_active = false
+                
+                bee.defeated()
+            }
+        })
+
         this.scene.bringToTop('playScene')
 
 
@@ -135,10 +153,6 @@ class Level_1 extends Phaser.Scene {
         }
     }
 
-    throwBomb() {
-        let bomb = new Bomb(this, this.player.x-this.player.width/1.35, this.player.y-70, 'bomb')
-        bomb.throw(!this.player.flipX)
-    }
 
     gameover() {
         let lose_screen = this.add.sprite(game.config.width/2, game.config.height/2, 'lose-screen').setScale(4).setOrigin(0.5, 0.5)

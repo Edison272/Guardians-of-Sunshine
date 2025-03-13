@@ -20,6 +20,7 @@ class Guardian extends Phaser.Physics.Arcade.Sprite {
       //attacking data
       this.atk_type = 'punch'
       this.item_type = 'bomb'
+      this.item_uses = 10
 
 
       // initialize state machine managing hero (initial state, possible states, state args[])
@@ -62,7 +63,8 @@ class IdleState extends State {
         if (Phaser.Input.Keyboard.JustDown(keyZ)) {
             this.stateMachine.transition('attack')
         }
-        if (Phaser.Input.Keyboard.JustDown(keyX)) {
+        if (Phaser.Input.Keyboard.JustDown(keyX) && guardian.item_uses > 0) {
+            guardian.item_uses -= 1
             this.stateMachine.transition(guardian.item_type)
         }
     }
@@ -73,10 +75,14 @@ class WalkState extends State {
         guardian.anims.play('guardian-walk', true)
     }
     execute(scene, guardian) {
-        if (Phaser.Input.Keyboard.JustDown(keyDOWN)) {
+        if (Phaser.Input.Keyboard.JustDown(keyZ)) {
+            guardian.setVelocityX(0)
             this.stateMachine.transition('attack')
-        }
-        if (keyLEFT.isDown) {
+        } else if (Phaser.Input.Keyboard.JustDown(keyX) && guardian.item_uses > 0) {
+            guardian.item_uses -= 1
+            guardian.setVelocityX(0)
+            this.stateMachine.transition(guardian.item_type)
+        } else if (keyLEFT.isDown) {
             guardian.setFlipX(true)
             if (Phaser.Input.Keyboard.JustDown(keyUP) && guardian.OnGround) {
                 guardian.setVelocityX(-300)
@@ -146,7 +152,8 @@ class FinalHitState extends State {
 class BombState extends State {
     enter(scene, guardian) {
         guardian.anims.play('guardian-bomb').once('animationcomplete', () => {
-            scene.throwBomb()
+            scene.bombs.add(new Bomb(scene, guardian.x-guardian.width/1.35, guardian.y-70, 'bomb'))
+            scene.bombs.getChildren().forEach(bomb => {bomb.throw(!guardian.flipX)})
             guardian.anims.play('guardian-bomb-throw').once('animationcomplete', () => {
                 this.stateMachine.transition('idle')
             })
