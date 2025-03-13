@@ -12,6 +12,7 @@ class Play extends Phaser.Scene {
         this.UIelements = this.add.group()
         this.UIbaritems = this.add.group()
         this.UIon = false
+        this.BossUI_on = false
 
 
         // SETUP STUFF
@@ -19,6 +20,7 @@ class Play extends Phaser.Scene {
         //ui bar
         this.UIbar = this.add.image(game.config.width/2, -100, 'ui-bar').setOrigin(0.5, 0.5).setScale(3.5)
         this.UIelements.add(this.UIbar)
+
 
         //lives
         let life_box_width = 250
@@ -39,15 +41,24 @@ class Play extends Phaser.Scene {
               top: 5,
               bottom: 5,
             },
-            fixedWidth: 200
+            fixedWidth: 1000
           }
         this.scoreui = this.add.text(game.config.width/2 - scoreConfig.fixedWidth/2, 60, this.score, scoreConfig)
         this.UIbaritems.add(this.scoreui)
+
+        //boss stuff
+        this.boss_bar = this.add.sprite(game.config.width/2, game.config.height/1.1+120, 'boss-bar').setScale(3.5)
+        this.boss_health = this.add.rectangle(game.config.width/2-450, game.config.height/1.1, 298, 28, 0xA8E61D).setScale(3,1.5).setOrigin(0, 0.5)
+        this.boss_name = this.add.text(game.config.width/2 - scoreConfig.fixedWidth/2, game.config.height/1.35, 'Bouncy Bee', scoreConfig)
+        this.UIbossBarItems = this.add.group([this.boss_health, this.boss_name])
+        this.UIelements.add(this.boss_bar)
 
         //GROUP TOGETHER AND SET TO FRONT
         this.UIbaritems.setVisible(false)
         this.UIelements.depth = 1000
         this.UIbaritems.depth = 1001
+
+        this.UIbossBarItems.setVisible(false)
         
     }
 
@@ -70,23 +81,52 @@ class Play extends Phaser.Scene {
         this.scoreui.text = this.score
     }
 
+    setupBoss(boss_name) {
+        this.boss_name = boss_name
+    }
+
+    updateBossHealth(health_percent) {
+        this.boss_health.scaleX = 3*health_percent
+    }
+
     toggleUI(on_off) { //trur for on
         this.UIon = on_off
+    }
+
+    toggleBossUI(on_off) {
+        this.BossUI_on = on_off
     }
 
     update () {
         if (this.UIon && this.UIbar.y < 60) {
             this.UIbar.y += 4
-            if(this.UIbar.y == 60) {
+            if(this.UIbar.y >= 60) {
                 this.UIbaritems.setVisible(true)
             }
-        } else if (!this.UIon && this.UIbar.y > -120) {
-            if(this.UIbar.y == 60) {
+        } else if (!this.UIon && this.UIbar.y > -100) {
+            if(this.UIbar.y <= 60) {
                 this.UIbaritems.setVisible(false)
             }
             this.UIbar.y -= 4
         }
 
+        if(this.BossUI_on && this.boss_bar.y > game.config.height/1.1) {
+            this.boss_bar.y -= 4
+            if(this.boss_bar.y <= game.config.height/1.1+12) {
+                this.UIbossBarItems.setVisible(true)
+            }
+        } else if(!this.BossUI_on && this.boss_bar.y < game.config.height/1.1+120) {
+            this.boss_bar.y += 4
+            if(this.boss_bar.y > game.config.height/1.1) {
+                this.UIbossBarItems.setVisible(false)
+            }
+        }
+
+
+    }
+
+    winScreen() {
+        let win_screen = this.add.sprite(game.config.width/2, game.config.height/2, 'win-screen').setScale(4).setOrigin(0.5, 0.5)
     }
 
 }

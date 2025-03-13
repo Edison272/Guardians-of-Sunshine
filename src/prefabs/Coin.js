@@ -5,6 +5,7 @@ class Coin extends Phaser.Physics.Arcade.Sprite {
       scene.physics.add.existing(this)
 
       this.setScale(2.5)
+      this.setOrigin(0.5, 0.5)
 
       this.anims.play('coin-idle')
 
@@ -16,8 +17,9 @@ class Coin extends Phaser.Physics.Arcade.Sprite {
 
     collect() {
         this.body.enable = false
+        this.scene.sound.play('coin-jingle')
         this.anims.play('coin-collect').once('animationcomplete', () => {
-            this.scene.sound.play('coin-jingle')
+            
             this.destroy()
         })
 

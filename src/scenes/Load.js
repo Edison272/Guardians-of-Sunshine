@@ -23,6 +23,17 @@ class Load extends Phaser.Scene {
             endFrame: 23
         })
 
+        //LE BOMBUH
+        this.load.spritesheet('bomb', './assets/Sprites/Game/BombSpriteSheet.png', {
+            frameWidth: 14,
+            frameHeight: 24,
+            startFrame: 0,
+            endFrame: 2
+        })
+
+        //GENERAL BOSS ASSETS
+        this.load.image('boss-bar', './assets/Sprites/UI/BossBar.png')
+
         //BOUNCING BEE
         this.load.spritesheet('bee', './assets/Sprites/Game/BouncingBee.png', {
             frameWidth: 57,
@@ -46,9 +57,21 @@ class Load extends Phaser.Scene {
         //FIREPIT
         this.load.image('firepit', './assets/Sprites/Game/Firepit.png')
 
+        //THE SUN
+        this.load.spritesheet('sun', './assets/Sprites/Game/Sun.png', {
+            frameWidth: 40,
+            frameHeight: 40,
+            startFrame: 0,
+            endFrame: 1
+        })
+
+        //EXIT DOOR
+        this.load.image('door', './assets/Sprites/Game/Door.png')
+
         //PLAY SCENE
         this.load.image('ui-bar', './assets/Sprites/UI/UIbar.png')
         this.load.image('life-counter', './assets/Sprites/UI/LifeCounter.png')
+
 
 
         //MUSIC
@@ -116,9 +139,26 @@ class Load extends Phaser.Scene {
 
         this.anims.create({
             key: 'guardian-bomb',
-            frameRate: 16,
+            frameRate: 4,
             repeat: 0,
-            frames: this.anims.generateFrameNumbers('guardian', {frames: [7, 12, 23, 8]})
+            frames: this.anims.generateFrameNumbers('guardian', {frames: [4, 6, 11, 12]})
+        })
+        this.anims.create({
+            key: 'guardian-bomb-throw',
+            frameRate: 8,
+            repeat: 0,
+            frames: this.anims.generateFrameNumbers('guardian', {frames: [12, 9, 21, 20, 10]})
+        })
+
+        //BOMBUH
+        this.anims.create({
+            key: 'bomb-sparkle',
+            frameRate: 6,
+            repeat: -1,
+            frames: this.anims.generateFrameNumbers('bomb', {
+                start: 0,
+                end: 2
+            })
         })
 
         //BEE
@@ -169,6 +209,15 @@ class Load extends Phaser.Scene {
             })
         })
 
+        //SUN
+        this.anims.create({
+            key: 'sun-idle',
+            frameRate: 2,
+            repeat: -1,
+            frames: this.anims.generateFrameNumbers('sun', {
+                frames: [0, 1]
+            })
+        })
 
         // START THE GAME
         this.scene.start('startScene') 

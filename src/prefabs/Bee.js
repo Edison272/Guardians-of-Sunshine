@@ -10,11 +10,11 @@ class Bee extends Phaser.Physics.Arcade.Sprite {
       this.body.setSize(57,43).setOffset(0, 0)
       this.body.pushable = false
       this.speed = 10
+      this.max_health = 10
       this.health = 10
       this.points = 500
 
       this.active_x = 0
-      this.active = false
 
       this.bound_x_min = 0
       this.bound_x_max = 100
@@ -37,6 +37,8 @@ class Bee extends Phaser.Physics.Arcade.Sprite {
         this.health -= dmg
     }
     defeated() {
+        this.anims.play('bee-fly')
+        this.anims.stop()
         this.destroy()
     }
 }
@@ -48,7 +50,7 @@ class EntryState extends State {
     execute(scene, bee) {
         console.log()
 
-        if(bee.active) {
+        if(scene.bee_active) {
             if(bee.x > bee.active_x){
                 bee.x -= 3
             } else {
@@ -62,7 +64,6 @@ class RetreatState extends State {
     enter(scene, bee) {
         bee.anims.play('bee-fly')
         bee.target_x = bee.bound_x_min + Math.floor(Math.random() * (bee.bound_x_max-bee.bound_x_min))
-        console.log(bee.target_x)
     }
     execute(scene, bee) {
         if(bee.x < bee.target_x + 10 && bee.x > bee.target_x - 10) {

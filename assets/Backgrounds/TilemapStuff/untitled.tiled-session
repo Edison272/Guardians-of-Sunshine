@@ -3,10 +3,37 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "",
+    "activeFile": "CaveTiles.tsx",
     "expandedProjectPaths": [
+        "."
     ],
     "fileStates": {
+        "CaveTiles.tsx": {
+            "scaleInDock": 2,
+            "scaleInEditor": 5.5
+        },
+        "Level1.json": {
+            "expandedObjectLayers": [
+                4
+            ],
+            "scale": 1.5,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 839.3333333333333,
+                "y": 124.66666666666666
+            }
+        },
+        "Level1.json#CaveTiles": {
+            "scaleInDock": 0.5
+        },
+        "Level1.tmx": {
+            "scale": 0.639738251041047,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 839.405802492096,
+                "y": 125.05114376046123
+            }
+        }
     },
     "last.exportedFilePath": "C:/Users/ediso/Downloads/CS Classes/CMPM 120/Guardians of Sunshine/assets/Backgrounds/TilemapStuff",
     "last.imagePath": "C:/Users/ediso/Downloads/CS Classes/CMPM 120/Guardians of Sunshine/assets/Backgrounds/TilemapStuff",
@@ -16,10 +43,16 @@
     "map.tileWidth": 12,
     "map.width": 40,
     "openFiles": [
+        "CaveTiles.tsx",
+        "Level1.json",
+        "Level1.tmx"
     ],
     "project": "untitled.tiled-project",
     "property.type": "bool",
     "recentFiles": [
+        "Level1.tmx",
+        "Level1.json",
+        "CaveTiles.tsx"
     ],
     "resizeMap.removeObjects": true,
     "tileset.lastUsedFormat": "tsx",

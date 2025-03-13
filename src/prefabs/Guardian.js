@@ -59,8 +59,11 @@ class IdleState extends State {
         if (Phaser.Input.Keyboard.JustDown(keyUP) && guardian.OnGround == true) {
             this.stateMachine.transition('jump')
         }
-        if (Phaser.Input.Keyboard.JustDown(keyDOWN)) {
+        if (Phaser.Input.Keyboard.JustDown(keyZ)) {
             this.stateMachine.transition('attack')
+        }
+        if (Phaser.Input.Keyboard.JustDown(keyX)) {
+            this.stateMachine.transition(guardian.item_type)
         }
     }
 }
@@ -141,5 +144,12 @@ class FinalHitState extends State {
 }
 
 class BombState extends State {
-
+    enter(scene, guardian) {
+        guardian.anims.play('guardian-bomb').once('animationcomplete', () => {
+            scene.throwBomb()
+            guardian.anims.play('guardian-bomb-throw').once('animationcomplete', () => {
+                this.stateMachine.transition('idle')
+            })
+        })
+    }
 }

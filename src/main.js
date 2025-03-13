@@ -21,4 +21,4 @@ let game = new Phaser.Game(config)
 let { height, width } = game.config
 let borderUISize = game.config.height / 25
 let borderPadding = borderUISize / 3
-let keyLEFT, keyRIGHT, keyUP, keyDOWN, keySPACE
+let keyLEFT, keyRIGHT, keyUP, keyDOWN, keySPACE, keyZ, keyX
