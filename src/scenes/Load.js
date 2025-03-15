@@ -31,8 +31,17 @@ class Load extends Phaser.Scene {
             endFrame: 2
         })
 
+
         //GENERAL BOSS ASSETS
         this.load.image('boss-bar', './assets/Sprites/UI/BossBar.png')
+
+        //BOSS DEATH
+        this.load.spritesheet('poof', './assets/Sprites/Game/BossPoof.png', {
+            frameWidth: 55,
+            frameHeight: 53,
+            startFrame: 0,
+            endFrame: 2
+        })
 
         //BOUNCING BEE
         this.load.spritesheet('bee', './assets/Sprites/Game/BouncingBee.png', {
@@ -41,6 +50,11 @@ class Load extends Phaser.Scene {
             startFrame: 0,
             endFrame: 11
         })
+
+        //GOO
+        this.load.image('goo', './assets/Sprites/Game/Goo.png')
+
+        //HONEY BUNNY
 
         this.load.image('stinger', './assets/Sprites/Game/BeeStinger.png')
 
@@ -156,6 +170,16 @@ class Load extends Phaser.Scene {
             frameRate: 6,
             repeat: -1,
             frames: this.anims.generateFrameNumbers('bomb', {
+                start: 0,
+                end: 2
+            })
+        })
+
+        this.anims.create({
+            key: 'boss-poof',
+            frameRate: 6,
+            repeat: 0,
+            frames: this.anims.generateFrameNumbers('poof', {
                 start: 0,
                 end: 2
             })

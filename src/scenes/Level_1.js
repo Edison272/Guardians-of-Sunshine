@@ -7,12 +7,6 @@ class Level_1 extends Phaser.Scene {
         //LOAD LEVEL STUFF
         this.load.image('tilesetIMG', './assets/Backgrounds/TilemapStuff/CaveTiles.png')
         this.load.tilemapTiledJSON('lvl1-tilemap', './assets/Backgrounds/TilemapStuff/Level1.json')
-    }
-
-    create() {
-        this.UIon = false
-
-        console.log('nothin much')
 
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT)
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT)
@@ -20,7 +14,11 @@ class Level_1 extends Phaser.Scene {
         keyDOWN = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN)
         keyZ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z)
         keyX = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.X)
+    }
 
+    create() {
+        this.UIon = false
+        this.stopEntities = false
 
         // LOAD LEVEL MAP
         const map = this.add.tilemap('lvl1-tilemap')
@@ -70,6 +68,7 @@ class Level_1 extends Phaser.Scene {
         for (let i =0; i < fire_spots.length; i++) {
             const pos = fire_spots[i]
             let hazard = new Firepit(this, pos.x*3, pos.y*3, 'firepit')
+            hazard.depth = 0
             this.hazards.add(hazard)
         }
 
@@ -97,8 +96,26 @@ class Level_1 extends Phaser.Scene {
                     this.scene.get('playScene').addScore(bee.points)
                     this.scene.get('playScene').toggleBossUI(false)
                     this.bee_active = false
-                    
+
+                    let scoreConfig = {
+                        fontFamily: 'Arial',
+                        fontSize: '50px',
+                        backgroundColor: 'rgba(0, 0, 0, 0)',
+                        color: '#a8e61d',
+                        align: 'center',
+                        padding: {
+                          top: 5,
+                          bottom: 5,
+                        },
+                        fixedWidth: 100
+                      }
+                    const score_text = this.add.text(bee.x, bee.y, bee.points, scoreConfig).setOrigin(0.5)
+                    const poof = this.add.sprite(bee.x, bee.y, 'poof', 0).setOrigin(0.5, 0.5).setScale(3.5)
                     bee.defeated()
+                    poof.anims.play('boss-poof').once('animationcomplete', () => {
+                        poof.destroy()
+                        score_text.destroy()
+                    })
                 }
             }
         })
@@ -155,11 +172,25 @@ class Level_1 extends Phaser.Scene {
 
 
     gameover() {
-        let lose_screen = this.add.sprite(game.config.width/2, game.config.height/2, 'lose-screen').setScale(4).setOrigin(0.5, 0.5)
+        let lose_screen = this.add.sprite(game.config.width/2, game.config.height/2, 'lose-screen').setScale(3).setOrigin(0, 0.5)
     }
 
 
     update() {
+        if(Phaser.Input.Keyboard.JustDown(keyDOWN)) { //auto skip level
+            console.log("skipping")
+            this.stopEntities = true
+            this.bee_active = false
+            this.bee.destroy()
+            this.scene.get('playScene').toggleUI(false)
+            this.scene.get('playScene').toggleBossUI(false)
+            let winScreen =  this.add.sprite(this.cameras.main.scrollX+game.config.width/2, this.cameras.main.scrollY+game.config.height/2, 'win-screen').setScale(3).setOrigin(0.5, 0.5)
+            winScreen.depth = 2000
+            this.startDelay = this.time.delayedCall(1500, () => {
+                this.scene.start('level_2_Scene')
+            });
+        }
+
         if (this.player.x > this.enter_cave_x && this.UIon == false) {
             this.UIon = true
             this.scene.get('playScene').toggleUI(true)
@@ -177,10 +208,15 @@ class Level_1 extends Phaser.Scene {
         }
 
         if(this.player.x >= this.door.x) {
-            this.scene.get('playScene').winScreen()
+            this.stopEntities = true
+            this.bee_active = false
+            this.bee.destroy()
+            this.scene.get('playScene').toggleUI(false)
+            this.scene.get('playScene').toggleBossUI(false)
+            let winScreen =  this.add.sprite(this.cameras.main.scrollX+game.config.width/2, this.cameras.main.scrollY+game.config.height/2, 'win-screen').setScale(3).setOrigin(0.5, 0.5)
+            winScreen.depth = 2000
             this.startDelay = this.time.delayedCall(1500, () => {
-                this.scene.launch('playScene')
-                this.scene.restart()
+                this.scene.start('level_2_Scene')
             });
         }
 
@@ -204,9 +240,11 @@ class Level_1 extends Phaser.Scene {
         })
 
         //PLAYER FSM STEP
-        this.GuardianFSM.step()
-        if(this.bee_active) {
-            this.BeeFSM.step()
+        if(!this.stopEntities) {
+            this.GuardianFSM.step()
+            if(this.bee_active) {
+                this.BeeFSM.step()
+            }
         }
 
         this.player.OnGround = false

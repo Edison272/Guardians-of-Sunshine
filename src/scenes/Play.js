@@ -14,6 +14,8 @@ class Play extends Phaser.Scene {
         this.UIon = false
         this.BossUI_on = false
 
+        this.winScreens = []
+
 
         // SETUP STUFF
         
@@ -59,6 +61,7 @@ class Play extends Phaser.Scene {
         this.UIbaritems.depth = 1001
 
         this.UIbossBarItems.setVisible(false)
+
         
     }
 

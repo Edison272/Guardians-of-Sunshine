@@ -14,17 +14,20 @@
         },
         "Level1.json": {
             "expandedObjectLayers": [
+                5,
+                2,
                 4
             ],
-            "scale": 1.5,
-            "selectedLayer": 0,
+            "scale": 2,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 839.3333333333333,
-                "y": 124.66666666666666
+                "x": 509.5,
+                "y": 193.5
             }
         },
         "Level1.json#CaveTiles": {
-            "scaleInDock": 0.5
+            "scaleInDock": 1.5,
+            "scaleInEditor": 5.5
         },
         "Level1.tmx": {
             "scale": 0.639738251041047,
@@ -33,12 +36,57 @@
                 "x": 839.405802492096,
                 "y": 125.05114376046123
             }
+        },
+        "Level2.json": {
+            "expandedObjectLayers": [
+                2,
+                4,
+                3
+            ],
+            "scale": 3,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 472.66666666666663,
+                "y": 215
+            }
+        },
+        "Level2.json#CaveTiles": {
+            "scaleInDock": 2
+        },
+        "Level2.tmj": {
+            "scale": 1.5,
+            "selectedLayer": 4,
+            "viewCenter": {
+                "x": 184.66666666666669,
+                "y": 160
+            }
+        },
+        "Level3.json": {
+            "expandedObjectLayers": [
+                5,
+                2,
+                4,
+                3
+            ],
+            "scale": 1.5,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 186,
+                "y": 203.33333333333334
+            }
+        },
+        "Level3.json#CaveTiles": {
+            "scaleInDock": 1.5
+        },
+        "Level_2.tsj": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
         }
     },
     "last.exportedFilePath": "C:/Users/ediso/Downloads/CS Classes/CMPM 120/Guardians of Sunshine/assets/Backgrounds/TilemapStuff",
     "last.imagePath": "C:/Users/ediso/Downloads/CS Classes/CMPM 120/Guardians of Sunshine/assets/Backgrounds/TilemapStuff",
     "map.lastUsedExportFilter": "JSON map files (*.tmj *.json)",
-    "map.lastUsedFormat": "tmx",
+    "map.lastUsedFormat": "json",
     "map.tileHeight": 12,
     "map.tileWidth": 12,
     "map.width": 40,
@@ -50,12 +98,14 @@
     "project": "untitled.tiled-project",
     "property.type": "bool",
     "recentFiles": [
+        "Level_2.tsj",
+        "CaveTiles.tsx",
         "Level1.tmx",
-        "Level1.json",
-        "CaveTiles.tsx"
+        "Level1.json"
     ],
     "resizeMap.removeObjects": true,
-    "tileset.lastUsedFormat": "tsx",
+    "tileset.embedInMap": true,
+    "tileset.lastUsedFormat": "json",
     "tileset.tileSize": {
         "height": 12,
         "width": 12
