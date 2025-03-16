@@ -10,6 +10,8 @@ class Load extends Phaser.Scene {
 
         //LEVEL SCREEN
         this.load.image('level-1', './assets/Backgrounds/Level-1-Pic.png')
+        this.load.image('level-2', './assets/Backgrounds/Level-1-Pic.png')
+        this.load.image('level-3', './assets/Backgrounds/Level-1-Pic.png')
 
         //Win Lose SCREEN
         this.load.image('win-screen', './assets/Backgrounds/WinScreen.png')
@@ -125,7 +127,7 @@ class Load extends Phaser.Scene {
         // GUARDIAN (PLAYER)
         this.anims.create({
             key: 'guardian-dance',
-            frameRate: 6,
+            frameRate: 8,
             repeat: 0,
             frames: this.anims.generateFrameNumbers('guardian', {frames: [1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 0]})
         })

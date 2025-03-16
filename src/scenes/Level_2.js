@@ -170,9 +170,9 @@ class Level_2 extends Phaser.Scene {
                     },
                     fixedWidth: 100
                   }
-                const score_text = this.add.text(bee.x, bee.y, bee.points, scoreConfig).setOrigin(0.5)
-                const poof = this.add.sprite(bee.x, bee.y, 'poof', 0).setOrigin(0.5, 0.5).setScale(3.5)
-                bee.defeated()
+                const score_text = this.add.text(bunny.x, bunny.y, bunny.points, scoreConfig).setOrigin(0.5)
+                const poof = this.add.sprite(bunny.x, bunny.y, 'poof', 0).setOrigin(0.5, 0.5).setScale(3.5)
+                bunny.defeated()
                 poof.anims.play('boss-poof').once('animationcomplete', () => {
                     poof.destroy()
                     score_text.destroy()
@@ -191,6 +191,24 @@ class Level_2 extends Phaser.Scene {
     }
 
     update() {
+        if (Phaser.Input.Keyboard.JustDown(keySPACE)) { //auto kill button
+            this.scene.get('playScene').damage()
+        }
+
+        if(Phaser.Input.Keyboard.JustDown(keyDOWN)) { //auto skip level
+            console.log("skipping")
+            this.stopEntities = true
+            this.bunny_active = false
+            this.bunny.destroy()
+            this.scene.get('playScene').toggleUI(false)
+            this.scene.get('playScene').toggleBossUI(false)
+            let winScreen =  this.add.sprite(this.cameras.main.scrollX+game.config.width/2, this.cameras.main.scrollY+game.config.height/2, 'level-3').setScale(3).setOrigin(0.5, 0.5)
+            winScreen.depth = 2000
+            this.startDelay = this.time.delayedCall(1500, () => {
+                this.scene.start('level_3_Scene')
+            });
+        }
+
         if (this.player.x > this.enter_cave_x && this.UIon == false) {
             this.UIon = true
             this.scene.get('playScene').toggleUI(true)
@@ -199,7 +217,7 @@ class Level_2 extends Phaser.Scene {
             this.scene.get('playScene').toggleUI(false)
         }
 
-        if(this.player.x >= this.fight_bunny_x && this.bunny_active == false && this.bunny.body != null) {
+        if(this.player.x >= this.fight_bunny_x && this.bunny_active == false && this.bunny.health > 0) {
             this.bunny_active = true
             this.scene.get('playScene').toggleBossUI(true)
         } else if((this.player.x < this.bunny.bound_x_min && this.bunny_active)) {
@@ -209,9 +227,11 @@ class Level_2 extends Phaser.Scene {
 
         if(this.player.x >= this.door.x) {
             this.stopEntities = true
+            this.bunny_active = false
+            this.bunny.destroy()
             this.scene.get('playScene').toggleUI(false)
             this.scene.get('playScene').toggleBossUI(false)
-            let winScreen =  this.add.sprite(this.cameras.main.scrollX+game.config.width/2, this.cameras.main.scrollY+game.config.height/2, 'win-screen').setScale(3).setOrigin(0.5, 0.5)
+            let winScreen =  this.add.sprite(this.cameras.main.scrollX+game.config.width/2, this.cameras.main.scrollY+game.config.height/2, 'level-3').setScale(3).setOrigin(0.5, 0.5)
             this.startDelay = this.time.delayedCall(1500, () => {
                 this.scene.start('level_3_Scene')
             });
@@ -221,7 +241,7 @@ class Level_2 extends Phaser.Scene {
         //PLAYER FSM STEP
         if(!this.stopEntities) {
             this.GuardianFSM.step()
-            if(this.bunny_active) {
+            if(this.UIon) {
                 this.BunnyFSM.step()
             }
         }

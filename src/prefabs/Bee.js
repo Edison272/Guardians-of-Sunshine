@@ -40,9 +40,8 @@ class Bee extends Phaser.Physics.Arcade.Sprite {
         }
     }
     defeated() {
-        this.anims.play('bee-fly')
         this.anims.stop()
-        this.destroy()
+        this.visible = false
     }
 }
 
@@ -51,8 +50,6 @@ class EntryState extends State {
         bee.anims.play('bee-fly')
     }
     execute(scene, bee) {
-        console.log()
-
         if(scene.bee_active) {
             if(bee.x > bee.active_x){
                 bee.x -= 3

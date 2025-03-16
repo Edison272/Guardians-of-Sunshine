@@ -26,7 +26,8 @@ class Bunny extends Phaser.Physics.Arcade.Sprite {
 
       //attack stuff
       this.lasers = 3
-      this.wait_time = 1500
+      this.wait_time = 3000
+
 
 
       // initialize state machine managing hero (initial state, possible states, state args[])
@@ -47,9 +48,8 @@ class Bunny extends Phaser.Physics.Arcade.Sprite {
       }
     }
     defeated() {
-        this.anims.play('hop')
         this.anims.stop()
-        this.destroy()
+        this.visible = false
     }
 
 }
@@ -69,20 +69,23 @@ class SpawnState extends State {
   enter(scene, bunny) {
     bunny.visible = true
     bunny.anims.play('bunny-spawn').once('animationcomplete', () => {
-      this.stateMachine.transition('bunny_shoot')
+      this.stateMachine.transition('wait')
     })
   }
 }
 
 class HopState extends State {
   enter(scene, bunny) {
+    if(!bunny.visible) {
+      return
+    }
     bunny.anims.play('bunny-jump').once('animationcomplete', () => {
       if(scene.player.x < bunny.x) {
         bunny.setFlipX(false)
-        bunny.body.setVelocity(-300, -400)
+        bunny.body.setVelocity(-200 + Math.floor(Math.random()*-100), -400)
       } else {
         bunny.setFlipX(true)
-        bunny.body.setVelocity(300, -400)
+        bunny.body.setVelocity(200 + Math.floor(Math.random()*100), -400)
       }
       bunny.anims.play('bunny-idle')
       const waiting = scene.time.delayedCall(bunny.wait_time/2, () => {
@@ -95,12 +98,15 @@ class HopState extends State {
 
 class BunnyShootState extends State {
   enter(scene, bunny) {
+    if(!bunny.visible) {
+      return
+    }
     bunny.anims.play('bunny-shoot').once('animationcomplete', () => {
       bunny.lasers -= 1
       scene.shootLaser(bunny.x, bunny.y-20)
       scene.shootLaser(bunny.x, bunny.y)
       bunny.anims.play('bunny-idle-short').once('animationcomplete', () => {
-        if(bunny.lasers > 0) {
+        if(bunny.lasers > 0 && scene.player.x > bunny.bound_x_min) {
           this.stateMachine.transition('bunny_shoot')
         } else {
           this.stateMachine.transition('wait')
@@ -119,10 +125,17 @@ class BunnyShootState extends State {
 
 class WaitState extends State {
   enter(scene, bunny) {
+    if(!bunny.visible) {
+      return
+    }
     bunny.lasers = 3
     bunny.anims.play('bunny-idle')
     const waiting = scene.time.delayedCall(bunny.wait_time, () => {
+      if(bunny.lasers > 0 && scene.player.x > bunny.bound_x_min) {
         this.stateMachine.transition('hop')
+      } else {
+        this.stateMachine.transition('wait')
+      }
     })
   }
 }
