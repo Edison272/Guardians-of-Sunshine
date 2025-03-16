@@ -38,6 +38,10 @@ class Level_3 extends Phaser.Scene {
         this.player = new Guardian(this, player_spawn.x*3+100, player_spawn.y*3, 'guardian').setOrigin(0.75, 1)
         this.bombs = this.add.group()
 
+        //SLEEPT SAM
+        this.scene.get('playScene').currentLevel = this.scene.key
+        this.scene.get('playScene').setupBoss('Sleepy Sam')
+
         //place coins
         let coin_spots = []
         this.coin_group = this.add.group()

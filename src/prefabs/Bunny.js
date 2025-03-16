@@ -4,17 +4,19 @@ class Bunny extends Phaser.Physics.Arcade.Sprite {
       scene.add.existing(this)
       scene.physics.add.existing(this)
 
+      this.visible = false
       this.setScale(3)
 
-      //swordsman physics
-      this.body.setSize(57,43).setOffset(0, 0)
+      //bunny physics
+      this.body.setSize(36,47).setOffset(0, 0)
       this.body.pushable = false
-      this.speed = 10
-      this.max_health = 10
-      this.health = 10
-      this.points = 500
+      this.body.setGravityY(1000)
 
-      this.active_x = 0
+
+      this.speed = 10
+      this.max_health = 9
+      this.health = 9
+      this.points = 800
 
       this.bound_x_min = 0
       this.bound_x_max = 100
@@ -22,16 +24,105 @@ class Bunny extends Phaser.Physics.Arcade.Sprite {
 
       this.damaged = false
 
+      //attack stuff
+      this.lasers = 3
+      this.wait_time = 1500
+
 
       // initialize state machine managing hero (initial state, possible states, state args[])
-      scene.BeeFSM = new StateMachine('spawn', {
+      scene.BunnyFSM = new StateMachine('not_spawned', {
+        not_spawned: new NotSpawnedState(),
         spawn: new SpawnState(),
+        hop: new HopState(),
+        bunny_shoot: new BunnyShootState(),
+        wait: new WaitState()
 
       }, [scene, this])
     }
 
+    damage(dmg = 1) {
+      this.health -= dmg
+      if(this.health < 0) {
+          this.health = 0
+      }
+    }
+    defeated() {
+        this.anims.play('hop')
+        this.anims.stop()
+        this.destroy()
+    }
+
+}
+
+class NotSpawnedState extends State {
+  enter(scene, bunny) {
+    bunny.visible = false
+  }
+  execute(scene, bunny) {
+    if(scene.bunny_active) {
+      this.stateMachine.transition('spawn')
+    }
+  }
 }
 
 class SpawnState extends State {
+  enter(scene, bunny) {
+    bunny.visible = true
+    bunny.anims.play('bunny-spawn').once('animationcomplete', () => {
+      this.stateMachine.transition('bunny_shoot')
+    })
+  }
+}
 
+class HopState extends State {
+  enter(scene, bunny) {
+    bunny.anims.play('bunny-jump').once('animationcomplete', () => {
+      if(scene.player.x < bunny.x) {
+        bunny.setFlipX(false)
+        bunny.body.setVelocity(-300, -400)
+      } else {
+        bunny.setFlipX(true)
+        bunny.body.setVelocity(300, -400)
+      }
+      bunny.anims.play('bunny-idle')
+      const waiting = scene.time.delayedCall(bunny.wait_time/2, () => {
+        bunny.setVelocity(0)
+        this.stateMachine.transition('bunny_shoot')
+      })
+    })
+  }
+}
+
+class BunnyShootState extends State {
+  enter(scene, bunny) {
+    bunny.anims.play('bunny-shoot').once('animationcomplete', () => {
+      bunny.lasers -= 1
+      scene.shootLaser(bunny.x, bunny.y-20)
+      scene.shootLaser(bunny.x, bunny.y)
+      bunny.anims.play('bunny-idle-short').once('animationcomplete', () => {
+        if(bunny.lasers > 0) {
+          this.stateMachine.transition('bunny_shoot')
+        } else {
+          this.stateMachine.transition('wait')
+        }
+      })
+    })
+  }
+  execute(scene, bunny) {
+      if(scene.player.x < bunny.x) {
+        bunny.setFlipX(false)
+      } else {
+        bunny.setFlipX(true)
+      }
+  }
+}
+
+class WaitState extends State {
+  enter(scene, bunny) {
+    bunny.lasers = 3
+    bunny.anims.play('bunny-idle')
+    const waiting = scene.time.delayedCall(bunny.wait_time, () => {
+        this.stateMachine.transition('hop')
+    })
+  }
 }

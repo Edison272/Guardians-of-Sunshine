@@ -14,6 +14,8 @@ class Level_1 extends Phaser.Scene {
         keyDOWN = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN)
         keyZ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z)
         keyX = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.X)
+
+        keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
     }
 
     create() {
@@ -47,6 +49,8 @@ class Level_1 extends Phaser.Scene {
         this.bee.bound_x_min = this.fight_bee_x-100
         this.bee.bound_x_max = bee_spawn.x*3+300
         this.bee_active = false
+        this.scene.get('playScene').currentLevel = this.scene.key
+        this.scene.get('playScene').setupBoss('Bouncy Bee')
         
         //bee stingers
         this.stingers = this.add.group()
@@ -151,7 +155,25 @@ class Level_1 extends Phaser.Scene {
                 this.scene.get('playScene').addScore(bee.points)
                 this.scene.get('playScene').toggleBossUI(false)
                 this.bee_active = false
-                
+                let scoreConfig = {
+                    fontFamily: 'Arial',
+                    fontSize: '50px',
+                    backgroundColor: 'rgba(0, 0, 0, 0)',
+                    color: '#a8e61d',
+                    align: 'center',
+                    padding: {
+                      top: 5,
+                      bottom: 5,
+                    },
+                    fixedWidth: 100
+                  }
+                const score_text = this.add.text(bee.x, bee.y, bee.points, scoreConfig).setOrigin(0.5)
+                const poof = this.add.sprite(bee.x, bee.y, 'poof', 0).setOrigin(0.5, 0.5).setScale(3.5)
+                bee.defeated()
+                poof.anims.play('boss-poof').once('animationcomplete', () => {
+                    poof.destroy()
+                    score_text.destroy()
+                })
                 bee.defeated()
             }
         })
@@ -177,6 +199,10 @@ class Level_1 extends Phaser.Scene {
 
 
     update() {
+        if (Phaser.Input.Keyboard.JustDown(keySPACE)) { //auto kill button
+            this.scene.get('playScene').damage()
+        }
+
         if(Phaser.Input.Keyboard.JustDown(keyDOWN)) { //auto skip level
             console.log("skipping")
             this.stopEntities = true
@@ -234,7 +260,7 @@ class Level_1 extends Phaser.Scene {
             if(stinger.body.y > 500) {
                 stinger.destroy()
             }
-            if(this.bee_active == false && this.bee.body == null) {
+            if(this.bee_active == false) {
                 stinger.destroy()
             }
         })

@@ -56,14 +56,17 @@ class Load extends Phaser.Scene {
 
         //HONEY BUNNY
         this.load.spritesheet('bunny', './assets/Sprites/Game/HoneyBunny.png', {
-            frameWidth: 35,
-            frameHeight: 48,
+            frameWidth: 36,
+            frameHeight: 47,
             startFrame: 0,
-            endFrame: 11
+            endFrame: 32
         })
 
         //STINGER
         this.load.image('stinger', './assets/Sprites/Game/BeeStinger.png')
+
+        //LASER
+        this.load.image('laser', './assets/Sprites/Game/Laser.png')
 
         //COIN
         this.load.spritesheet('coin', './assets/Sprites/Game/CoinSpriteSheet.png', {
@@ -220,6 +223,59 @@ class Load extends Phaser.Scene {
                 frames: [3, 1, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 6, 6, 6, 7, 7, 7]
             })
         })
+
+        //BUNNY
+        this.anims.create({
+            key: 'bunny-spawn',
+            frameRate: 11,
+            repeat: 0,
+            frames: this.anims.generateFrameNumbers('bunny', {
+                start:11,
+                end: 32
+            })
+        })
+
+        this.anims.create({
+            key: 'bunny-jump',
+            frameRate: 8,
+            repeat: 0,
+            frames: this.anims.generateFrameNumbers('bunny', {
+                start: 7,
+                end: 4
+            })
+        })
+
+        this.anims.create({
+            key: 'bunny-shoot',
+            frameRate: 18,
+            repeat: 3,
+            frames: this.anims.generateFrameNumbers('bunny', {
+                start: 8,
+                end: 10
+            })
+        })
+
+        this.anims.create({
+            key: 'bunny-idle',
+            frameRate: 6,
+            repeat: -1,
+            frames: this.anims.generateFrameNumbers('bunny', {
+                start:0,
+                end: 3
+            })
+        })
+
+        this.anims.create({
+            key: 'bunny-idle-short',
+            frameRate: 6,
+            repeat: 1,
+            frames: this.anims.generateFrameNumbers('bunny', {
+                start:0,
+                end: 3
+            })
+        })
+
+
 
         //COIN
         this.anims.create({

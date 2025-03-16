@@ -10,8 +10,8 @@ class Bee extends Phaser.Physics.Arcade.Sprite {
       this.body.setSize(57,43).setOffset(0, 0)
       this.body.pushable = false
       this.speed = 10
-      this.max_health = 10
-      this.health = 10
+      this.max_health = 15
+      this.health = 15
       this.points = 500
 
       this.active_x = 0

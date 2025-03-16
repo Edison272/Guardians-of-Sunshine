@@ -16,6 +16,8 @@ class Play extends Phaser.Scene {
 
         this.winScreens = []
 
+        this.currentLevel = 'level_1_Scene'
+
 
         // SETUP STUFF
         
@@ -51,8 +53,8 @@ class Play extends Phaser.Scene {
         //boss stuff
         this.boss_bar = this.add.sprite(game.config.width/2, game.config.height/1.1+120, 'boss-bar').setScale(3.5)
         this.boss_health = this.add.rectangle(game.config.width/2-450, game.config.height/1.1, 298, 28, 0xA8E61D).setScale(3,1.5).setOrigin(0, 0.5)
-        this.boss_name = this.add.text(game.config.width/2 - scoreConfig.fixedWidth/2, game.config.height/1.35, 'Bouncy Bee', scoreConfig)
-        this.UIbossBarItems = this.add.group([this.boss_health, this.boss_name])
+        this.boss_name_tag = this.add.text(game.config.width/2 - scoreConfig.fixedWidth/2, game.config.height/1.35, 'default', scoreConfig)
+        this.UIbossBarItems = this.add.group([this.boss_health, this.boss_name_tag])
         this.UIelements.add(this.boss_bar)
 
         //GROUP TOGETHER AND SET TO FRONT
@@ -73,7 +75,7 @@ class Play extends Phaser.Scene {
                 let lose_screen = this.add.sprite(game.config.width/2, game.config.height/2, 'lose-screen').setScale(4).setOrigin(0.5, 0.5)
                 this.startDelay = this.time.delayedCall(1500, () => {
                     this.scene.restart()
-                    this.scene.start('level_1_Scene')
+                    this.scene.get(this.currentLevel).scene.start('level_1_Scene')
                 });
             }
         }
@@ -85,7 +87,9 @@ class Play extends Phaser.Scene {
     }
 
     setupBoss(boss_name) {
-        this.boss_name = boss_name
+        this.boss_name_tag.text = boss_name
+
+        this.boss_health.scaleX = 3
     }
 
     updateBossHealth(health_percent) {
