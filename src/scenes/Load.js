@@ -55,7 +55,14 @@ class Load extends Phaser.Scene {
         this.load.image('goo', './assets/Sprites/Game/Goo.png')
 
         //HONEY BUNNY
+        this.load.spritesheet('bunny', './assets/Sprites/Game/HoneyBunny.png', {
+            frameWidth: 35,
+            frameHeight: 48,
+            startFrame: 0,
+            endFrame: 11
+        })
 
+        //STINGER
         this.load.image('stinger', './assets/Sprites/Game/BeeStinger.png')
 
         //COIN

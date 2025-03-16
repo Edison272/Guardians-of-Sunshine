@@ -14,9 +14,9 @@
         },
         "Level1.json": {
             "expandedObjectLayers": [
+                4,
                 5,
-                2,
-                4
+                2
             ],
             "scale": 2,
             "selectedLayer": 1,

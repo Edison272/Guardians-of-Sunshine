@@ -42,6 +42,14 @@ class Level_2 extends Phaser.Scene {
         this.player = new Guardian(this, player_spawn.x*3+100, player_spawn.y*3, 'guardian').setOrigin(0.75, 1)
         this.bombs = this.add.group()
 
+        //bee
+        const bunny_spawn = map.findObject('SpawnPoint', (obj) => obj.name === 'HoneyBunnySpawn')
+        this.bunny = new Bunny(this, bunny_spawn.x*3+300, bunny_spawn.y*3-30, 'bunny')
+        this.bunny.active_x = bunny_spawn.x*3
+        this.bunny.bound_x_min = this.fight_bee_x-100
+        this.bunny.bound_x_max = bunny_spawn.x*3+300
+        this.bee_active = false
+
 
         //place coins
         let coin_spots = []
