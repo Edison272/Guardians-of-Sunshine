@@ -36,6 +36,7 @@ class Level_3 extends Phaser.Scene {
         // PLAYER
         const player_spawn = map.findObject('SpawnPoint', (obj) => obj.name === 'PlayerSpawn')
         this.player = new Guardian(this, player_spawn.x*3+100, player_spawn.y*3, 'guardian').setOrigin(0.75, 1)
+        this.player.item_uses = this.scene.get('playScene').bombs
         this.bombs = this.add.group()
 
         //SLEEPT SAM

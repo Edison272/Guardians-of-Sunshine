@@ -7,8 +7,10 @@ class Play extends Phaser.Scene {
     create() {
         // GAME PRESETS
         this.lives = 3
+        this.bombs = 2
         this.score = 0
         this.life_tokens = []
+        this.bomb_tokens = []
         this.UIelements = this.add.group()
         this.UIbaritems = this.add.group()
         this.UIon = false
@@ -32,6 +34,13 @@ class Play extends Phaser.Scene {
             this.life_tokens[i] = this.add.image((game.config.width/4.75) - (life_box_width/2) + (life_box_width/this.lives)*i, 100, 'life-counter').setOrigin(0.5, 0.5).setScale(3.5)
             this.UIelements.add(this.life_tokens[i])
             this.UIbaritems.add(this.life_tokens[i])
+        }
+
+        //bombs
+        for(let i = 0; i < this.bombs; i++) {
+            this.bomb_tokens[i] = this.add.image((game.config.width/1.15) - (life_box_width/2) + (life_box_width/this.bombs)*i, 100, 'bomb').setOrigin(0.5, 0.75).setScale(3.5)
+            this.UIelements.add(this.bomb_tokens[i])
+            this.UIbaritems.add(this.bomb_tokens[i])
         }
 
         //score board
@@ -78,6 +87,13 @@ class Play extends Phaser.Scene {
                     this.scene.get(this.currentLevel).scene.start('level_1_Scene')
                 });
             }
+        }
+    }
+
+    useBomb() {
+        if(this.bombs > 0) {
+            this.bomb_tokens[this.bombs-1].destroy()
+            this.bombs -= 1
         }
     }
 

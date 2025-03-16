@@ -26,7 +26,7 @@ class Bunny extends Phaser.Physics.Arcade.Sprite {
 
       //attack stuff
       this.lasers = 3
-      this.wait_time = 3000
+      this.wait_time = 2000
 
 
 

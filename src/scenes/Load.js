@@ -10,8 +10,8 @@ class Load extends Phaser.Scene {
 
         //LEVEL SCREEN
         this.load.image('level-1', './assets/Backgrounds/Level-1-Pic.png')
-        this.load.image('level-2', './assets/Backgrounds/Level-1-Pic.png')
-        this.load.image('level-3', './assets/Backgrounds/Level-1-Pic.png')
+        this.load.image('level-2', './assets/Backgrounds/Level-2-Pic.png')
+        this.load.image('level-3', './assets/Backgrounds/Level-3-Pic.png')
 
         //Win Lose SCREEN
         this.load.image('win-screen', './assets/Backgrounds/WinScreen.png')

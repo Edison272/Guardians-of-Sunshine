@@ -40,6 +40,7 @@ class Level_1 extends Phaser.Scene {
         // PLAYER
         const player_spawn = map.findObject('SpawnPoint', (obj) => obj.name === 'PlayerSpawn')
         this.player = new Guardian(this, player_spawn.x*3+100, player_spawn.y*3, 'guardian').setOrigin(0.75, 1)
+        this.player.item_uses = this.scene.get('playScene').bombs
         this.bombs = this.add.group()
 
         //bee
@@ -248,10 +249,10 @@ class Level_1 extends Phaser.Scene {
 
         this.stingers.getChildren().forEach(stinger => {
             if(stinger.body.y < 100) {
-                if(Math.random > 0.5) {
-                    stinger.body.x = this.player.x + Math.floor(Math.random()*-100)
+                if(Math.random() > 0.5) {
+                    stinger.body.x = this.player.x + Math.floor(Math.random()*-40)
                 } else {
-                    stinger.body.x = this.player.x + Math.floor(Math.random()*100)
+                    stinger.body.x = this.player.x + Math.floor(Math.random()*40)
                 }
                 stinger.setFlipY(true)
                 stinger.body.y = 150

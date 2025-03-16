@@ -15,7 +15,7 @@ class Start extends Phaser.Scene {
 
         this.level_started = false
 
-        this.intro = this.sound.play('Intro')
+        this.intro = this.sound.play('Intro', {volume: 0.1})
     }
 
     update() {

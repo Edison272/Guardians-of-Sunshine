@@ -20,7 +20,7 @@ class Guardian extends Phaser.Physics.Arcade.Sprite {
       //attacking data
       this.atk_type = 'punch'
       this.item_type = 'bomb'
-      this.item_uses = 10
+      this.item_uses = 20 //default
 
 
       // initialize state machine managing hero (initial state, possible states, state args[])
@@ -153,6 +153,7 @@ class BombState extends State {
     enter(scene, guardian) {
         guardian.anims.play('guardian-bomb').once('animationcomplete', () => {
             scene.bombs.add(new Bomb(scene, guardian.x-guardian.width/1.35, guardian.y-70, 'bomb'))
+            scene.scene.get('playScene').useBomb()
             scene.bombs.getChildren().forEach(bomb => {bomb.throw(!guardian.flipX)})
             guardian.anims.play('guardian-bomb-throw').once('animationcomplete', () => {
                 this.stateMachine.transition('idle')
