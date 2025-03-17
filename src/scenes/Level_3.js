@@ -165,7 +165,7 @@ class Level_3 extends Phaser.Scene {
 
         this.input.keyboard.on('keycombomatch', () => {
             this.stop_the_count = true
-            
+            this.frog.health = 0
             this.scene.get('playScene').addScore(this.frog.points)
             this.scene.get('playScene').toggleBossUI(false)
             this.frog_active = false

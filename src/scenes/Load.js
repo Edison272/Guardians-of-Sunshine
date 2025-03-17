@@ -131,7 +131,7 @@ class Load extends Phaser.Scene {
                 { key: 'start-screen-1' },
                 { key: 'start-screen-2' }
             ],
-            frameRate: 2,
+            frameRate: 1,
             repeat: -1
         });
 
