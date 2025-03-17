@@ -17,6 +17,9 @@ class Load extends Phaser.Scene {
         this.load.image('win-screen', './assets/Backgrounds/WinScreen.png')
         this.load.image('lose-screen', './assets/Backgrounds/LoseScreen.png')
 
+        //INSTRUCTIONS
+        this.load.image('instructions', './assets/Backgrounds/Instructions.png')
+
         //GUARDIAN (PLAYER)
         this.load.spritesheet('guardian', './assets/Sprites/Game/GuardianSpriteSheet.png', {
             frameWidth: 24,
