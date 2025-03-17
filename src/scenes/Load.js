@@ -64,6 +64,14 @@ class Load extends Phaser.Scene {
             endFrame: 32
         })
 
+        //SLEEPY SAM
+        this.load.spritesheet('frog', './assets/Sprites/Game/SleepySam.png', {
+            frameWidth: 51,
+            frameHeight: 23,
+            startFrame: 0,
+            endFrame: 25
+        })
+
         //STINGER
         this.load.image('stinger', './assets/Sprites/Game/BeeStinger.png')
 
@@ -277,8 +285,43 @@ class Load extends Phaser.Scene {
             })
         })
 
+        //FRPG
+        this.anims.create({
+            key: 'frog-sleep',
+            frameRate: 6,
+            repeat: -1,
+            frames: this.anims.generateFrameNumbers('frog', {
+                frames:[3, 4, 5, 5, 4, 3]
+            })
+        })
 
+        this.anims.create({
+            key: 'frog-wake',
+            frameRate: 4,
+            repeat: 0,
+            frames: this.anims.generateFrameNumbers('frog', {
+                frames:[2, 2, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1]
+            })
+        })
 
+        this.anims.create({
+            key: 'frog-wait',
+            frameRate: 3,
+            repeat: -1,
+            frames: this.anims.generateFrameNumbers('frog', {
+                frames:[1, 1, 1, 1, 1, 1, 1, 2]
+            })
+        })
+
+        this.anims.create({
+            key: 'frog-eat',
+            frameRate: 6,
+            repeat: 0,
+            frames: this.anims.generateFrameNumbers('frog', {
+                start: 6,
+                end: 24
+            })
+        })
         //COIN
         this.anims.create({
             key: 'coin-idle',

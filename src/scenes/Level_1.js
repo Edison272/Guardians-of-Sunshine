@@ -211,7 +211,7 @@ class Level_1 extends Phaser.Scene {
             this.bee.destroy()
             this.scene.get('playScene').toggleUI(false)
             this.scene.get('playScene').toggleBossUI(false)
-            let winScreen =  this.add.sprite(this.cameras.main.scrollX+game.config.width/2, this.cameras.main.scrollY+game.config.height/2, 'level-2').setScale(3).setOrigin(0.5, 0.5)
+            let winScreen =  this.add.sprite(this.cameras.main.scrollX+game.config.width/2, this.cameras.main.scrollY+game.config.height/2, 'level-2').setScale(4).setOrigin(0.5, 0.5)
             winScreen.depth = 2000
             this.startDelay = this.time.delayedCall(1500, () => {
                 this.scene.start('level_2_Scene')

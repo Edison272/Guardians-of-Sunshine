@@ -13,14 +13,12 @@ class Bunny extends Phaser.Physics.Arcade.Sprite {
       this.body.setGravityY(1000)
 
 
-      this.speed = 10
       this.max_health = 9
       this.health = 9
       this.points = 800
 
       this.bound_x_min = 0
       this.bound_x_max = 100
-      this.target_x = 0
 
       this.damaged = false
 

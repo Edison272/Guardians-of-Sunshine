@@ -12,6 +12,7 @@ class Level_3 extends Phaser.Scene {
         keyDOWN = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN)
         keyZ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z)
         keyX = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.X)
+        keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
     }
 
     create() {
@@ -34,12 +35,15 @@ class Level_3 extends Phaser.Scene {
         caveLayer.setCollisionByProperty({ collides: true })
 
         // PLAYER
-        const player_spawn = map.findObject('SpawnPoint', (obj) => obj.name === 'PlayerSpawn')
-        this.player = new Guardian(this, player_spawn.x*3+100, player_spawn.y*3, 'guardian').setOrigin(0.75, 1)
+        this.player_spawn = map.findObject('SpawnPoint', (obj) => obj.name === 'PlayerSpawn')
+        this.player = new Guardian(this, this.player_spawn.x*3+100, this.player_spawn.y*3, 'guardian').setOrigin(0.5, 1)
         this.player.item_uses = this.scene.get('playScene').bombs
         this.bombs = this.add.group()
 
         //SLEEPT SAM
+        const frog_spawn = map.findObject('SpawnPoint', (obj) => obj.name === 'FrogSpawn')
+        this.frog = new Frog(this, frog_spawn.x*3, frog_spawn.y*3, 'frog')
+        this.frog_active = false
         this.scene.get('playScene').currentLevel = this.scene.key
         this.scene.get('playScene').setupBoss('Sleepy Sam')
 
@@ -69,6 +73,7 @@ class Level_3 extends Phaser.Scene {
 
 
 
+
         // PHYSICS
         this.physics.add.collider(this.player, caveLayer, (player, caveLayer) => {
             player.OnGround = true
@@ -79,15 +84,138 @@ class Level_3 extends Phaser.Scene {
             coin.collect()
         })
 
+        this.physics.add.collider(this.player, this.frog, (player, frog) => {
+            if(player.isAttacking) {
+                frog.damage()
+                this.scene.get('playScene').updateBossHealth(this.frog.health/this.frog.max_health)
+                player.isAttacking = false
+                if(frog.health == 0) {
+                    player.finalHit = true
+                    this.scene.get('playScene').addScore(frog.points)
+                    this.scene.get('playScene').toggleBossUI(false)
+                    this.frog_active = false
+
+                    let scoreConfig = {
+                        fontFamily: 'Arial',
+                        fontSize: '50px',
+                        backgroundColor: 'rgba(0, 0, 0, 0)',
+                        color: '#a8e61d',
+                        align: 'center',
+                        padding: {
+                          top: 5,
+                          bottom: 5,
+                        },
+                        fixedWidth: 100
+                      }
+                    const score_text = this.add.text(frog.x, frog.y, frog.points, scoreConfig).setOrigin(0.5)
+                    const poof = this.add.sprite(frog.x, frog.y, 'poof', 0).setOrigin(0.5, 0.5).setScale(3.5)
+                    frog.defeated()
+                    poof.anims.play('boss-poof').once('animationcomplete', () => {
+                        poof.destroy()
+                        score_text.destroy()
+                    })
+                }
+            }
+        })
+
         this.physics.add.overlap(this.hazards, this.player, (hazard, player) => {
             this.scene.get('playScene').damage()
             player.setVelocityY(0)
-            this.player.setPosition(player_spawn.x*3, player_spawn.y)
+            this.player.setPosition(this.player_spawn.x*3, this.player_spawn.y*3)
+        })
+
+        this.physics.add.overlap(this.bombs, this.frog, (bomb, frog) => {
+            frog.damage(bomb.bomb_dmg)
+            bomb.detonate()
+            this.scene.get('playScene').updateBossHealth(this.frog.health/this.frog.max_health)
+            if(frog.health == 0) {
+                this.scene.get('playScene').addScore(frog.points)
+                this.scene.get('playScene').toggleBossUI(false)
+                this.frog_active = false
+                let scoreConfig = {
+                    fontFamily: 'Arial',
+                    fontSize: '50px',
+                    backgroundColor: 'rgba(0, 0, 0, 0)',
+                    color: '#a8e61d',
+                    align: 'center',
+                    padding: {
+                      top: 5,
+                      bottom: 5,
+                    },
+                    fixedWidth: 100
+                  }
+                const score_text = this.add.text(frog.x, frog.y, frog.points, scoreConfig).setOrigin(0.5)
+                const poof = this.add.sprite(frog.x, frog.y, 'poof', 0).setOrigin(0.5, 0.5).setScale(3.5)
+                frog.defeated()
+                poof.anims.play('boss-poof').once('animationcomplete', () => {
+                    poof.destroy()
+                    score_text.destroy()
+                })
+                frog.defeated()
+            }
         })
 
         this.physics.add.collider(this.bombs, caveLayer, (bomb, caveLayer) => {
             bomb.detonate()
         })
+
+        //SPECIAL COMBO
+        this.stop_the_count = false
+        this.input.keyboard.createCombo([keyUP, keyDOWN, keyLEFT, keyLEFT, keyRIGHT, keyRIGHT, keyDOWN, keyUP, keyRIGHT, keyDOWN, keyLEFT, keyX], { resetOnMatch: true });
+
+        this.input.keyboard.on('keycombomatch', () => {
+            this.stop_the_count = true
+            
+            this.scene.get('playScene').addScore(this.frog.points)
+            this.scene.get('playScene').toggleBossUI(false)
+            this.frog_active = false
+            let scoreConfig = {
+                fontFamily: 'Arial',
+                fontSize: '50px',
+                backgroundColor: 'rgba(0, 0, 0, 0)',
+                color: '#a8e61d',
+                align: 'center',
+                padding: {
+                  top: 5,
+                  bottom: 5,
+                },
+                fixedWidth: 200
+              }
+            const score_text = this.add.text(this.frog.x, this.frog.y, this.frog.points, scoreConfig).setOrigin(0.5)
+            const poof = this.add.sprite(this.frog.x, this.frog.y, 'poof', 0).setOrigin(0.5, 0.5).setScale(3.5)
+            this.frog.defeated()
+            poof.anims.play('boss-poof').once('animationcomplete', () => {
+                poof.destroy()
+                score_text.destroy()
+            })
+        
+        })
+    }
+
+    fateSealed() {
+        //turn off normal UI and camera
+        if(this.stop_the_count) {
+            return
+        }
+        this.scene.get('playScene').toggleUI(false)
+        this.scene.get('playScene').toggleBossUI(false)
+        this.player.visible = false
+        this.player.setVelocity(0)
+        this.stopEntities = true
+        this.cameras.main.startFollow(this.frog, false, 0.5, 0.5)
+        this.cameras.main.zoom = 3
+        this.time.delayedCall(6000, () => {
+            this.frog_active = false
+            this.UIon = false
+            this.player.visible = true
+            this.stopEntities = false
+            this.cameras.main.startFollow(this.player, false, 0.5, 0.5)
+            this.cameras.main.zoom = 1
+            //respawn player
+            this.scene.get('playScene').damage()
+            this.player.setPosition(this.player_spawn.x*3, this.player_spawn.y*3)
+            //reset frog
+        });
 
     }
 
@@ -100,13 +228,13 @@ class Level_3 extends Phaser.Scene {
             this.scene.get('playScene').toggleUI(false)
         }
 
-        // if(this.player.x >= this.fight_bunny_x && this.bee_active == false && this.bee.body != null) {
-        //     this.bee_active = true
-        //     this.scene.get('playScene').toggleBossUI(true)
-        // } else if((this.player.x < this.bee.bound_x_min && this.bee_active)) {
-        //     this.bee_active = false
-        //     this.scene.get('playScene').toggleBossUI(false)
-        // }
+        if(this.player.x >= this.fight_frog_x && this.frog_active == false && this.frog.health > 0) {
+            this.frog_active = true
+            this.scene.get('playScene').toggleBossUI(true)
+        } else if((this.player.x < this.fight_frog_x && this.frog_active)) {
+            this.frog_active = false
+            this.scene.get('playScene').toggleBossUI(false)
+        }
 
         if(this.player.x >= this.door.x) {
             this.stopEntities = true
@@ -114,14 +242,17 @@ class Level_3 extends Phaser.Scene {
             this.scene.get('playScene').toggleBossUI(false)
             let winScreen =  this.add.sprite(this.cameras.main.scrollX+game.config.width/2, this.cameras.main.scrollY+game.config.height/2, 'win-screen').setScale(3).setOrigin(0.5, 0.5)
             this.startDelay = this.time.delayedCall(1500, () => {
-                this.scene.start('level_3_Scene')
+                this.scene.start('startScene')
             });
         }
 
         //PLAYER FSM STEP
         if(!this.stopEntities) {
+            
             this.GuardianFSM.step()
-
+            if(this.frog_active) {
+                this.FrogFSM.step()
+            }
         }
 
         this.player.OnGround = false
