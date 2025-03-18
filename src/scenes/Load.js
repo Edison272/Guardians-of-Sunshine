@@ -20,6 +20,9 @@ class Load extends Phaser.Scene {
         //INSTRUCTIONS
         this.load.image('instructions', './assets/Backgrounds/Instructions.png')
 
+        //CREDITS
+        this.load.image('credits', './assets/Backgrounds/Credits.png')
+
         //GUARDIAN (PLAYER)
         this.load.spritesheet('guardian', './assets/Sprites/Game/GuardianSpriteSheet.png', {
             frameWidth: 24,

@@ -12,10 +12,14 @@ class Start extends Phaser.Scene {
 
         //set key control
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
+        keyDOWN = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN)
 
         this.sequence = 0
         this.intro_screen = this.add.sprite(game.config.width/2, game.config.height/2, 'instructions').setScale(1.2).setOrigin(0.5, 0.5)
         this.intro_screen.visible = false
+
+        this.credit_screen = this.add.sprite(game.config.width/2, game.config.height/2, 'credits').setScale(1.1).setOrigin(0.5, 0.5)
+        this.credit_screen.visible = false
 
         this.intro = this.sound.play('Intro', {volume: 0.1})
     }
@@ -29,7 +33,6 @@ class Start extends Phaser.Scene {
             }else if (this.sequence == 1) {
                 this.intro_screen.destroy()
                 this.sequence = 2
-                console.log(this.sequence)
                 this.level_started = true
                 let level_screen = this.add.sprite(game.config.width/2, game.config.height/2, 'level-1').setScale(4).setOrigin(0.5, 0.5)
                 this.startDelay = this.time.delayedCall(1500, () => {
@@ -37,6 +40,15 @@ class Start extends Phaser.Scene {
                     this.scene.start('level_1_Scene')
                 });
 
+            }
+        }
+        if (Phaser.Input.Keyboard.JustDown(keyDOWN)) {
+            if(this.sequence == 0) {
+                this.credit_screen.visible = true
+                this.sequence = -1
+            } else if(this.sequence == -1) {
+                this.credit_screen.visible = false
+                this.sequence = 0
             }
         }
     }
