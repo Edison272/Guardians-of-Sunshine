@@ -40,6 +40,7 @@ class Bee extends Phaser.Physics.Arcade.Sprite {
         }
     }
     defeated() {
+        this.scene.sound.play('Restart')
         this.anims.stop()
         this.visible = false
     }

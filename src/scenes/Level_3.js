@@ -71,7 +71,10 @@ class Level_3 extends Phaser.Scene {
         this.cameras.main.setBounds(0,0,caveLayer.width*3, caveLayer.height*3)
         this.cameras.main.startFollow(this.player, false, 0.5, 0.5)
 
-
+        //bg music
+        this.bgMusic = this.sound.add('LoopMusic')
+        this.bgMusic.loop = true; // This is what you are looking for
+        this.bgMusic.play();
 
 
         // PHYSICS
@@ -120,12 +123,14 @@ class Level_3 extends Phaser.Scene {
 
         this.physics.add.overlap(this.hazards, this.player, (hazard, player) => {
             this.scene.get('playScene').damage()
+            this.sound.play('guardian-die-sfx')
             player.setVelocityY(0)
             this.player.setPosition(this.player_spawn.x*3, this.player_spawn.y*3)
         })
 
         this.physics.add.overlap(this.bombs, this.frog, (bomb, frog) => {
             frog.damage(bomb.bomb_dmg)
+            this.sound.play('guardian-bomb-boom')
             bomb.detonate()
             this.scene.get('playScene').updateBossHealth(this.frog.health/this.frog.max_health)
             if(frog.health == 0) {
@@ -157,6 +162,7 @@ class Level_3 extends Phaser.Scene {
 
         this.physics.add.collider(this.bombs, caveLayer, (bomb, caveLayer) => {
             bomb.detonate()
+            this.sound.play('guardian-bomb-boom')
         })
 
         //SPECIAL COMBO
@@ -236,11 +242,14 @@ class Level_3 extends Phaser.Scene {
             this.scene.get('playScene').toggleBossUI(false)
         }
 
-        if(this.player.x >= this.door.x) {
+        if(this.player.x >= this.door.x && !this.stopEntities) {
             this.stopEntities = true
             this.scene.get('playScene').toggleUI(false)
             this.scene.get('playScene').toggleBossUI(false)
+            this.player.StopAudio()
             let winScreen =  this.add.sprite(this.cameras.main.scrollX+game.config.width/2, this.cameras.main.scrollY+game.config.height/2, 'win-screen').setScale(3).setOrigin(0.5, 0.5)
+            this.bgMusic.stop()
+            this.sound.play('Restart')
             this.startDelay = this.time.delayedCall(1500, () => {
                 this.scene.start('startScene')
             });

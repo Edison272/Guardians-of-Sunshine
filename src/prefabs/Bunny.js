@@ -14,7 +14,7 @@ class Bunny extends Phaser.Physics.Arcade.Sprite {
 
 
       this.max_health = 9
-      this.health = 15
+      this.health = 9
       this.points = 800
 
       this.bound_x_min = 0
@@ -46,6 +46,7 @@ class Bunny extends Phaser.Physics.Arcade.Sprite {
       }
     }
     defeated() {
+        this.scene.sound.play('Restart')
         this.anims.stop()
         this.visible = false
     }

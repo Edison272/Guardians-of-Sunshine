@@ -22,6 +22,8 @@ class Play extends Phaser.Scene {
 
 
         // SETUP STUFF
+
+        this.keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R)
         
         //ui bar
         this.UIbar = this.add.image(game.config.width/2, -100, 'ui-bar').setOrigin(0.5, 0.5).setScale(3.5)
@@ -82,9 +84,13 @@ class Play extends Phaser.Scene {
             this.lives -= 1
             if(this.lives == 0) {
                 let lose_screen = this.add.sprite(game.config.width/2, game.config.height/2, 'lose-screen').setScale(4).setOrigin(0.5, 0.5)
+                this.scene.get(this.currentLevel).bgMusic.stop()
+                this.scene.get(this.currentLevel).player.StopAudio()
+                this.sound.play('GameOver')
                 this.startDelay = this.time.delayedCall(1500, () => {
                     this.scene.restart()
                     this.scene.get(this.currentLevel).scene.start('level_1_Scene')
+                    
                 });
             }
         }
@@ -121,6 +127,13 @@ class Play extends Phaser.Scene {
     }
 
     update () {
+        if (Phaser.Input.Keyboard.JustDown(this.keyR)) {
+            this.scene.get(this.currentLevel).bgMusic.stop()
+            this.scene.get(this.currentLevel).player.StopAudio()
+            this.scene.stop()
+            this.scene.get(this.currentLevel).scene.start('startScene')
+                
+        }
         if (this.UIon && this.UIbar.y < 60) {
             this.UIbar.y += 4
             if(this.UIbar.y >= 60) {

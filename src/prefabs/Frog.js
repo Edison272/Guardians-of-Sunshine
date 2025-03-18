@@ -41,6 +41,7 @@ class Frog extends Phaser.Physics.Arcade.Sprite {
       }
     }
     defeated() {
+        this.scene.sound.play('Restart')
         this.anims.stop()
         this.body.enable = false
         this.visible = false
@@ -73,6 +74,7 @@ class SleepState extends State {
         this.wait_atk = scene.time.delayedCall(frog.wait_time, () => {
             scene.fateSealed()
             frog.anims.play('frog-eat').once('animationcomplete', () => {
+                scene.sound.play('guardian-die-sfx')
                 this.stateMachine.transition('sleeping')
             })
       })

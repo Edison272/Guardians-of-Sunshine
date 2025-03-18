@@ -22,6 +22,10 @@ class Guardian extends Phaser.Physics.Arcade.Sprite {
       this.item_type = 'bomb'
       this.item_uses = 20 //default
 
+      //audio player
+      this.walkAudio = scene.sound.add('guardian-walk-sfx')
+      this.walkAudio.loop = true
+
 
       // initialize state machine managing hero (initial state, possible states, state args[])
       scene.GuardianFSM = new StateMachine('dancing', {
@@ -34,6 +38,10 @@ class Guardian extends Phaser.Physics.Arcade.Sprite {
         bomb: new BombState()
 
       }, [scene, this])
+    }
+
+    StopAudio() {
+        this.walkAudio.stop()
     }
 }
 
@@ -73,19 +81,23 @@ class IdleState extends State {
 class WalkState extends State {
     enter(scene, guardian) {
         guardian.anims.play('guardian-walk', true)
+        guardian.walkAudio.play()
     }
     execute(scene, guardian) {
         if (Phaser.Input.Keyboard.JustDown(keyZ)) {
             guardian.setVelocityX(0)
             this.stateMachine.transition('attack')
+            guardian.walkAudio.stop()
         } else if (Phaser.Input.Keyboard.JustDown(keyX) && guardian.item_uses > 0) {
             guardian.item_uses -= 1
             guardian.setVelocityX(0)
+            guardian.walkAudio.stop()
             this.stateMachine.transition(guardian.item_type)
         } else if (keyLEFT.isDown) {
             guardian.setFlipX(true)
+            guardian.setVelocityX(-300)
             if (Phaser.Input.Keyboard.JustDown(keyUP) && guardian.OnGround) {
-                guardian.setVelocityX(-300)
+                guardian.walkAudio.stop()
                 this.stateMachine.transition('jump')
             } else {
                 guardian.setVelocityX(-200)
@@ -94,6 +106,7 @@ class WalkState extends State {
         } else if (keyRIGHT.isDown) {
             guardian.setFlipX(false)
             if (Phaser.Input.Keyboard.JustDown(keyUP) && guardian.OnGround) {
+                guardian.walkAudio.stop()
                 guardian.setVelocityX(300)
                 this.stateMachine.transition('jump')
             } else {
@@ -101,6 +114,7 @@ class WalkState extends State {
             }
             
         } else {
+            guardian.walkAudio.stop()
             this.stateMachine.transition('idle')
         }
 
@@ -110,6 +124,7 @@ class WalkState extends State {
 
 class JumpState extends State {
     enter(scene, guardian) {
+        scene.sound.play('guardian-jump-sfx')
         guardian.anims.play('guardian-jump').once('animationcomplete', () => {
             guardian.OnGround = false
             guardian.setVelocityY(0)
@@ -127,6 +142,7 @@ class AttackState extends State {
     enter(scene, guardian) {
         guardian.isAttacking = true
         guardian.body.setSize(20,28).setOffset(2, 4)
+        scene.sound.play('guardian-hit-sfx')
         guardian.anims.play(`guardian-${guardian.atk_type}`).once('animationcomplete', () => {
             guardian.isAttacking = false
             guardian.body.setSize(8,28).setOffset(8, 4)
@@ -142,6 +158,7 @@ class AttackState extends State {
 class FinalHitState extends State {
     enter(scene, guardian) {
         guardian.finalHit = false
+        scene.sound.play('guardian-kick-sfx')
         guardian.anims.play('guardian-final-hit').once('animationcomplete', () => {
 
             this.stateMachine.transition('idle')
@@ -151,6 +168,7 @@ class FinalHitState extends State {
 
 class BombState extends State {
     enter(scene, guardian) {
+        scene.sound.play('guardian-bomb-prep')
         guardian.anims.play('guardian-bomb').once('animationcomplete', () => {
             scene.bombs.add(new Bomb(scene, guardian.x-guardian.width/1.35, guardian.y-70, 'bomb'))
             scene.scene.get('playScene').useBomb()

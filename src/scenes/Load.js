@@ -117,6 +117,23 @@ class Load extends Phaser.Scene {
         //MUSIC
         this.load.audio('Intro', './assets/SFX/Music/GameIntro.mp3')
 
+        //LOOPING MUSIC
+        this.load.audio('LoopMusic', './assets/SFX/Music/LoopingTrack.mp3')
+
+        //GAME EVENTS
+        this.load.audio('LevelStart', './assets/SFX/LevelStart.mp3')
+        this.load.audio('GameOver', './assets/SFX/GameOver.mp3')
+        this.load.audio('Restart', './assets/SFX/Respawn.mp3')
+
+        //GUARDIAN SFX
+        this.load.audio('guardian-walk-sfx', './assets/SFX/Guardian/GuardianWalking.mp3')
+        this.load.audio('guardian-jump-sfx', './assets/SFX/Guardian/GuardianJump.mp3')
+        this.load.audio('guardian-hit-sfx', './assets/SFX/Guardian/GuardianHit.mp3')
+        this.load.audio('guardian-kick-sfx', './assets/SFX/Guardian/GuardianKick.mp3')
+        this.load.audio('guardian-bomb-prep', './assets/SFX/Guardian/GuardianBombPrep.wav')
+        this.load.audio('guardian-bomb-boom', './assets/SFX/Guardian/GuardianBombBoom.wav')
+        this.load.audio('guardian-die-sfx', './assets/SFX/Die.mp3')
+
         // SET GAME CONTROLS
         // keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT)
         // keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT)

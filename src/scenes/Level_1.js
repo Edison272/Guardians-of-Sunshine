@@ -84,6 +84,11 @@ class Level_1 extends Phaser.Scene {
         this.cameras.main.setBounds(0,0,caveLayer.width*3, caveLayer.height*3)
         this.cameras.main.startFollow(this.player, false, 0.5, 0.5)
 
+        //bg music
+        this.bgMusic = this.sound.add('LoopMusic')
+        this.bgMusic.loop = true; // This is what you are looking for
+        this.bgMusic.play();
+
 
         //PHYSICS
 
@@ -134,23 +139,27 @@ class Level_1 extends Phaser.Scene {
             this.scene.get('playScene').damage()
             player.setVelocityY(0)
             this.player.setPosition(player_spawn.x*3, player_spawn.y)
+            this.sound.play('guardian-die-sfx')
         })
 
         this.physics.add.overlap(this.stingers, this.player, (stinger, player) => {
             if(stinger.flipY) {
                 this.scene.get('playScene').damage()
+                this.sound.play('guardian-die-sfx')
                 player.setVelocityY(0)
                 player.setPosition(player_spawn.x*3, player_spawn.y)
             }
         })
 
         this.physics.add.collider(this.bombs, caveLayer, (bomb, caveLayer) => {
+            this.sound.play('guardian-bomb-boom')
             bomb.detonate()
         })
 
         this.physics.add.overlap(this.bombs, this.bee, (bomb, bee) => {
             bee.damage(bomb.bomb_dmg)
             bomb.detonate()
+            this.sound.play('guardian-bomb-boom')
             this.scene.get('playScene').updateBossHealth(this.bee.health/this.bee.max_health)
             if(bee.health == 0) {
                 this.scene.get('playScene').addScore(bee.points)
@@ -211,6 +220,9 @@ class Level_1 extends Phaser.Scene {
             this.bee.destroy()
             this.scene.get('playScene').toggleUI(false)
             this.scene.get('playScene').toggleBossUI(false)
+            this.bgMusic.stop()
+            this.sound.play('LevelStart')
+            this.player.StopAudio()
             let winScreen =  this.add.sprite(this.cameras.main.scrollX+game.config.width/2, this.cameras.main.scrollY+game.config.height/2, 'level-2').setScale(4).setOrigin(0.5, 0.5)
             winScreen.depth = 2000
             this.startDelay = this.time.delayedCall(1500, () => {
@@ -234,12 +246,15 @@ class Level_1 extends Phaser.Scene {
             this.scene.get('playScene').toggleBossUI(false)
         }
 
-        if(this.player.x >= this.door.x) {
+        if(this.player.x >= this.door.x && !this.stopEntities) {
             this.stopEntities = true
             this.bee_active = false
             this.bee.destroy()
             this.scene.get('playScene').toggleUI(false)
             this.scene.get('playScene').toggleBossUI(false)
+            this.bgMusic.stop()
+            this.sound.play('LevelStart')
+            this.player.StopAudio()
             let winScreen =  this.add.sprite(this.cameras.main.scrollX+game.config.width/2, this.cameras.main.scrollY+game.config.height/2, 'level-2').setScale(3).setOrigin(0.5, 0.5)
             winScreen.depth = 2000
             this.startDelay = this.time.delayedCall(1500, () => {
